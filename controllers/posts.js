@@ -1,5 +1,7 @@
 const model = require('../models/posts');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
+const path = require('path');
 
 // 전체 게시글 리스트 조회 /posts GET
 // 지역명으로 리스트 조회 /posts?location=애월 GET
@@ -57,7 +59,7 @@ module.exports = {
     },
     createPost: async(req, res) => {
         try {
-            console.log(req.file.path)
+            //console.log(req.file.path)
             req.body.post_image_path = "/images/"+req.file.filename;
             const salt = bcrypt.genSaltSync(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
@@ -92,16 +94,38 @@ module.exports = {
     },
     deletePost: async(req, res) => {
         try {
+            const target = await model.readPost(req.body.id);
             const result = await model.deletePost(req.body);
             if(result == -1){
                 res.status(404).json({"message":"post_not_found"});
             } else if(result == -2){
                 res.status(401).json({"message":"unauthorized"});
             } else if(result){
+                // 게시물 삭제 성공 시 이미지 파일 삭제
+                const imagePath = target.post_image_path;
+                console.log("zzz"+imagePath);
+                if(imagePath) {
+                    // 이미지 파일 경로에서 실제 파일 이름 추출
+                    const newImagePath = imagePath.replace('/images', '/uploads');
+                    // 파일 경로 생성
+                    const filePath = newImagePath;
+                    // 파일 삭제
+                    // 이미지 파일 삭제
+                if (filePath) {
+                    try {
+                    console.log("111"+filePath);
+                    await fs.promises.unlink(path.resolve('.'+ filePath));
+                    } catch (error) {
+                    console.error(`Failed to delete image file: ${filePath}`, error);
+                    }
+                }
+                    //fs.unlinkSync('./uploads/' + filename); // 동기적으로 파일 삭제
+                }
                 res.status(200).json({"message":"post_delete_success"});
             } else if(!result){
                 res.status(400).json({"message":"post_delete_failed"});
             }
+
         } catch (e) {
             res.status(500).json({"message": "Internal_server_error"});
         }
