@@ -1,0 +1,34 @@
+# Created by https://www.toptal.com/developers/gitignore/api/expressionengine
+# Edit at https://www.toptal.com/developers/gitignore?templates=expressionengine
+
+### ExpressionEngine ###
+.DS_Store
+
+# Images
+images/avatars/
+images/captchas/
+images/smileys/
+images/member_photos/
+images/signature_attachments/
+images/pm_attachments/
+
+# For security do not publish the following files
+system/expressionengine/config/database.php
+system/expressionengine/config/config.php
+
+# Caches
+sized/
+thumbs/
+_thumbs/
+*/expressionengine/cache/*
+
+# 업로드한 이미지 무시
+uploads/
+
+#node_modules
+node_modules/
+
+#환경변수
+.env
+
+# End of https://www.toptal.com/developers/gitignore/api/expressionengine
