@@ -103,7 +103,6 @@ module.exports = {
             } else if(result){
                 // 게시물 삭제 성공 시 이미지 파일 삭제
                 const imagePath = target.post_image_path;
-                console.log("zzz"+imagePath);
                 if(imagePath) {
                     // 이미지 파일 경로에서 실제 파일 이름 추출
                     const newImagePath = imagePath.replace('/images', '/uploads');
@@ -113,7 +112,6 @@ module.exports = {
                     // 이미지 파일 삭제
                 if (filePath) {
                     try {
-                    console.log("111"+filePath);
                     await fs.promises.unlink(path.resolve('.'+ filePath));
                     } catch (error) {
                     console.error(`Failed to delete image file: ${filePath}`, error);
