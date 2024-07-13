@@ -103,7 +103,7 @@ module.exports = {
         const SQLA = `select password from posts where id = ? and deleted_at is null`;
         try{
             const encryptPassword = await db.query(SQLA, [data.id]);
-            const auth = bcrypt.compare(data.password, encryptPassword[0][0].password);
+            const auth = await bcrypt.compare(data.password, encryptPassword[0][0].password);
             if(!auth){ //401
                 return -2;
             }
