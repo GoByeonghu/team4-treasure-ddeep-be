@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 // posts 엔드포인트 분리
 app.use('/api/posts', posts_route);
 
-app.use('/images', express.static('uploads'));
+app.use('/api/images', express.static('uploads'));
 
 
 // 서버 동작
