@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 // app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerFile, {explorer:true}));
 
 // posts 엔드포인트 분리
-app.use('/posts', posts_route);
+app.use('/api/posts', posts_route);
 
 app.use('/images', express.static('uploads'));
 
