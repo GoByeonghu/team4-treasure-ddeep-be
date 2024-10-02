@@ -1,0 +1,50 @@
+name: Front-Prod build & deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: TopazKang
+        password: ${{ secrets.GHCR_TOKEN }}
+
+    - name: Build Docker image
+      run: |
+        docker build \
+        --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+        --build-arg DB_USER=${{ secrets.DB_USER }} \
+        --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+        --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+        --build-arg DB_PORT=${{ secrets.DB_PORT }} \
+        -t ghcr.io/topazkang/ddeep-prod-be:latest .
+
+    - name: Push Docker image to GHCR
+      run: docker push ghcr.io/topazkang/ddeep-prod-be:latest
+
+  deploy:
+    runs-on: [ self-hosted, Linux, X64, ddeep-prod-be ]
+    name: Deploy on Self-Hosted Runner
+    needs: build
+
+    steps:
+      - name: set env & deploy
+        run: |
+          cd /home/ubuntu/deploy/be
+          docker-compose -f docker-compose.back.yaml up -d
