@@ -27,14 +27,14 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 
-router.get('/', listupPosts);
+router.get('/api/', listupPosts);
 
-router.get('/:id', readPost);
+router.get('/api/:id', readPost);
 
-router.post('/',upload.single('post_image_path') ,createPost);
+router.post('/api/',upload.single('post_image_path') ,createPost);
 
-router.patch('/', upload.single('post_image_path'), modifyPost);
+router.patch('/api/', upload.single('post_image_path'), modifyPost);
 
-router.delete('/', deletePost);
+router.delete('/api/', deletePost);
 
 module.exports = router;
