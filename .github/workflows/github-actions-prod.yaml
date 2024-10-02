@@ -47,4 +47,7 @@ jobs:
       - name: set env & deploy
         run: |
           cd /home/ubuntu/deploy/be
+          docker image prune -a -f
+          docker-compose -f docker-compose.back.yaml down
+          docker-compose -f docker-compose.back.yaml pull
           docker-compose -f docker-compose.back.yaml up -d
